@@ -22,9 +22,10 @@ def build_stacks(input_file:TextIO):
     input_file.seek(0)
 
     blank_pattern = re.compile(r'\s+')
+    
+    # TODO stop file early, don't go through all lines.
 
     for line in input_file:
-
         i = 0
         for crate in get_stack_row(line):
             value = crate[0]
