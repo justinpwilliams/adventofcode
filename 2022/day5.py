@@ -68,13 +68,51 @@ def make_moves(input_file:TextIO, stacks):
 def get_stack_tops(stacks)->None:
     message = ''
     for stack in stacks:
-        message += stack[-1]
+        if len(stack) > 0:
+            message += stack[-1]
     print(stacks)
     print(message)
+
+def make_move2(move:str, stacks)->None:
+    """
+    Executes a single move given a move strong of the form 
+    'move num from stack to stack'
+    """
+    input_pattern = re.compile('[0-9]+')
+    move_tuple = input_pattern.findall(move)
+    from_stack = int(move_tuple[1])
+    to_stack = int(move_tuple[2])
+    end_num = len(stacks[from_stack-1])
+    start_num = end_num - int(move_tuple[0])
+
+    # print(stacks[from_stack-1])
+    # print(stacks[to_stack-1])
+    # j = input('Enter to continue.')
+    
+    for i in range(int(move_tuple[0])):
+        stacks[to_stack-1].extend(stacks[from_stack-1][start_num:end_num])
+        del stacks[from_stack-1][start_num:end_num]
+
+    # print(move)
+    # print(stacks[from_stack-1])
+    # print(stacks[to_stack-1])
+
+
+def make_moves2(input_file:TextIO, stacks):
+    for line in input_file:
+        make_move2(line, stacks)
 
 
 with open('day5input.txt') as input_file:
     stacks = build_stacks(input_file)
     make_moves(input_file, stacks)
     get_stack_tops(stacks)
+
+    input_file.seek(0)
+
+    stacks = build_stacks(input_file)
+    make_moves2(input_file, stacks)
+    get_stack_tops(stacks)
+
+
 
